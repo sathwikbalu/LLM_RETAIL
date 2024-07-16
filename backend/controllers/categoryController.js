@@ -1,6 +1,6 @@
 import Category from "../models/categoryModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
-import mongoose from "mongoose";
+
 const createCategory = asyncHandler(async (req, res) => {
   try {
     const { name } = req.body;
@@ -45,31 +45,12 @@ const updateCategory = asyncHandler(async (req, res) => {
 });
 
 const removeCategory = asyncHandler(async (req, res) => {
-  //   try {
-  //     const removed = await Category.findByIdAndRemove(req.params.categoryId);
-  //     // const removed = await Category.findByIdAndDelete(req.params.categoryId);
-  //     res.json(removed);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ error: "Internal server error" });
-  //   }
   try {
-    const categoryId = req.params.categoryId;
-
-    // Ensure categoryId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-      return res.status(400).json({ error: "Invalid category ID" });
-    }
-
-    const removedCategory = await Category.findByIdAndDelete(categoryId);
-
-    if (!removedCategory) {
-      return res.status(404).json({ error: "Category not found" });
-    }
-
-    res.json({ message: "Category deleted successfully", removedCategory });
+    const { Id } = req.params;
+    const removed = await Category.findByIdAndDelete(Id);
+    res.json(removed);
   } catch (error) {
-    console.error("Error deleting category:", error);
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
